@@ -1,0 +1,127 @@
+import numpy as np
+from scipy import stats
+from scipy.stats import ttest_1samp
+from datetime import datetime
+import matplotlib.pyplot as plt
+# running the stats even though import is not resolved
+
+'''
+    The following python code will calculate the average, mean, standard deviation, 
+    t-statistic, and p-value of the following:
+        Time each user took to complete the entire test from start to finish
+        Time it took each user to complete the task, accounting for and penalizing misclicks
+        Time each user took to successfully complete the assigned task from start to finish
+    
+    It will also calculate the verage time each user took for each of the 
+    five steps of the assigned task, gathered by the heatmap data. This data is then used 
+    to create a bar chat to show a graphical representation of that data. 
+
+'''
+
+# data set 1 - duration in the quiz (total)
+app_time_duration = ["00:01:39", "00:01:00", "00:15:45", "00:01:51", "00:03:43"]
+#conversion for dataset 1 to seconds
+time_in_seconds = [datetime.strptime(duration, "%H:%M:%S") for duration in app_time_duration]
+time_in_seconds = [duration.hour * 3600 + duration.minute * 60 + duration.second for duration in time_in_seconds]
+# calculate average, mean, and std dev
+average_duration = round(sum(time_in_seconds) / len(time_in_seconds), 2)
+mean_duration = round(np.mean(time_in_seconds), 2)
+std_deviation = round(np.std(time_in_seconds), 2)
+# statistic and p_value
+population_mean = 2.5
+t_statistic, p_value = ttest_1samp(time_in_seconds, population_mean)
+
+# Print results
+print("\n***********************************************************\n")
+print("-----------------------------------------------------------")
+print("Statistical Results: Time it took each user to complete the \ntest from start to finish")
+print("-----------------------------------------------------------")
+print(f"Average Duration: {average_duration} seconds")
+print(f"Mean Duration: {mean_duration} seconds")
+print(f"Standard Deviation: {std_deviation} seconds")
+print(f"Normality Test: T-statistic = {t_statistic:.2f}, p-value = {p_value:.2f}")
+print("\n***********************************************************\n")
+
+# -----------------------------------------------------------------------------------
+
+# data set 2 - direct success in seconds (avg & std dev)
+direct_success = ["00:00:58", "00:00:91", "00:00:52", "00:00:44", "00:00:65"]
+# convert time string to seconds 
+time_in_seconds = [int(duration.split(":")[1]) * 60 + int(duration.split(":")[2]) for duration in direct_success]
+# calculate the average, mean, std dev, t-stat, and p-value 
+average_duration = round(sum(time_in_seconds) / len(time_in_seconds), 2)
+mean_duration = round(np.mean(time_in_seconds), 2)
+std_deviation = round(np.std(time_in_seconds), 2)
+population_mean = 2.5
+t_statistic, p_value = ttest_1samp(time_in_seconds, population_mean)
+# print out the results
+print("-----------------------------------------------------------")
+print("Statistical Results: Time it took each user to complete the \ntask, accounting for and penalizing misclicks")
+print("-----------------------------------------------------------")
+print(f"Average Duration: {average_duration} seconds")
+print(f"Mean Duration: {mean_duration} seconds")
+print(f"Standard Deviation: {std_deviation} seconds")
+print(f"Normality Test: T-statistic = {t_statistic:.2f}, p-value = {p_value:.2f}")
+print("\n***********************************************************\n")
+
+#---------------------------------------------------------------------------------------------------
+
+# data set 3 - time spent clicking in the app
+
+time_clicking = ["00:00:579", "00:00:907", "00:00:516", "00:00:437", "00:00:648"]
+# convert time string to seconds 
+time_in_seconds = [int(duration.split(":")[1]) * 60 + int(duration.split(":")[2]) for duration in time_clicking]
+# calculate the average, mean, std dev, t-stat, and p-value 
+average_duration = round(sum(time_in_seconds) / len(time_in_seconds), 2)
+mean_duration = round(np.mean(time_in_seconds), 2)
+std_deviation = round(np.std(time_in_seconds), 2)
+population_mean = 2.5
+t_statistic, p_value = ttest_1samp(time_in_seconds, population_mean)
+# print out the results
+print("-----------------------------------------------------------")
+print("Statistical Results: Time each user took to successfully \ncomplete the assigned task from start to finish")
+print("-----------------------------------------------------------")
+print(f"Average Duration: {average_duration} seconds")
+print(f"Mean Duration: {mean_duration} seconds")
+print(f"Standard Deviation: {std_deviation} seconds")
+print(f"Normality Test: T-statistic = {t_statistic:.2f}, p-value = {p_value:.2f}")
+print("\n***********************************************************\n")
+#-------------------------------------------------------------------------------------------------------
+
+# graph for data set 4 - heat map click average in seconds 
+
+# data sets for each steps clicks in seconds
+step_1 = [2.30, 1.18, 1.42, 2.67, 1.80]
+step_2 = [1.03, 0.86, 1.15, 3.19, 1.42]
+step_3 = [0.93, 0.91, 0.69, 1.04, 0.93]
+step_4 = [1.00, 0.74, 0.96, 0.93, 0.85]
+step_5 = [1.22, 0.69, 0.94, 1.24, 0.79]
+
+# average for each step
+step_1_average = round(sum(step_1) / len(step_1), 2)
+step_2_average = round(sum(step_2) / len(step_2), 2)
+step_3_average = round(sum(step_3) / len(step_3), 2)
+step_4_average = round(sum(step_4) / len(step_4), 2)
+step_5_average = round(sum(step_5) / len(step_5), 2)
+
+# print out the averages
+print("-----------------------------------------------------------")
+print("Average time each user took for each of the five steps of \nthe assigned task, gathered by heatmap")
+print("-----------------------------------------------------------")
+print(f"Step 1 Average: {step_1_average} seconds")
+print(f"Step 2 Average: {step_2_average} seconds")
+print(f"Step 3 Average: {step_3_average} seconds")
+print(f"Step 4 Average: {step_4_average} seconds")
+print(f"Step 5 Average: {step_5_average} seconds")
+print("\n***********************************************************\n")
+
+# averages from each step
+step_averages = [step_1_average, step_2_average, step_3_average, step_4_average, step_5_average]
+steps = [1, 2, 3, 4, 5]
+
+# bar chart to show the averages
+plt.bar(steps, step_averages, color='blue')
+plt.xlabel('Steps')
+plt.ylabel('Seconds')
+plt.title('Average Time per User Click by Step')
+plt.show()
